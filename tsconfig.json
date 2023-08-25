@@ -26,6 +26,7 @@
       "pages/*": ["./src/pages/*"],
       "styles/*": ["./src/styles/*"],
       "constants/*": ["./src/constants/*"],
+      "hooks/*": ["./src/hooks/*"],
       "routes/": ["./src/routes", "./src/routes/*"],
       "interfaces/": ["./src/data/interfaces/", "./src/data/interfaces/*"],
       "objects/": ["./src/data/objects/", "./src/data/objects/*"],

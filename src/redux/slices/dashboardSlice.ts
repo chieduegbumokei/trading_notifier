@@ -17,8 +17,8 @@ const initialState: DashboardState = {
   isLookupActive: false,
   loading: "",
   notifications: [],
-  authCode: undefined,
-  channelId: undefined,
+  authCode: "",
+  channelId: "",
   panels: initialPanels,
 };
 

@@ -14,7 +14,7 @@ const MainLayoutSidebarItem: React.FC<Props> = ({
   active,
 }) => {
   return (
-    <SidebarItem to={href} active={active}>
+    <SidebarItem to={href} active={active.toString()}>
       {icon}
       {text}
       {notificationCounter && (

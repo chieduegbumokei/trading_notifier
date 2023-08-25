@@ -40,7 +40,7 @@ export const SidebarItems = styled.section`
 `;
 
 type SidebarItemStyle = {
-  active: boolean;
+  active: string;
 };
 
 export const SidebarItem = styled(Link)<SidebarItemStyle>`
@@ -51,15 +51,17 @@ export const SidebarItem = styled(Link)<SidebarItemStyle>`
   align-items: center;
   padding: 0 0.75rem 0 1rem;
   color: ${(props) =>
-    props.active ? props.theme.colors.secondary : props.theme.colors.primary};
+    props.active === "true"
+      ? props.theme.colors.secondary
+      : props.theme.colors.primary};
   font-size: 16.738px;
-  font-weight: ${(props) => (props.active ? 600 : 400)};
+  font-weight: ${(props) => (props.active === "true" ? 600 : 400)};
   letter-spacing: 0.167px;
   gap: 1rem;
   text-decoration: none;
   border-radius: 4.185px;
   background-color: ${(props) =>
-    props.active ? props.theme.colors.accentBg : "transparent"};
+    props.active === "true" ? props.theme.colors.accentBg : "transparent"};
   transition: all 0.25s ease;
 
   &:hover {
