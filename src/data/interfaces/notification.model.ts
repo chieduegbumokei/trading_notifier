@@ -1,6 +1,6 @@
 export interface Notification {
   username: string;
-  timestamp: Date;
+  timestamp: string;
   content: string;
   messageLink: string;
 }

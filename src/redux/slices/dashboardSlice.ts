@@ -17,8 +17,8 @@ type DashboardState = {
 const initialState: DashboardState = {
   lookupText: "",
   isLookupActive: false,
-  loading: LoadingState.Succeded,
-  mode: DashbaordMode.Searching,
+  loading: LoadingState.Idle,
+  mode: DashbaordMode.Insert,
   notifications: [],
   authCode: "",
   channelId: "",
