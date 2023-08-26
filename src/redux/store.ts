@@ -6,7 +6,13 @@ export const store = configureStore({
     dashboard: dashboardReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: ["dasshboard.panels"],
+        ignoredPaths: ["dashboard.panels"],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
