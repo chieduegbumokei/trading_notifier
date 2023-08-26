@@ -10,7 +10,7 @@ export const Container = styled.button`
   background-color: transparent;
   padding: 0 2.5rem;
   height: 3.625rem;
-  width: min-content;
+  width: max-content;
   color: ${(props) => props.theme.colors.secondaryBg};
   font-weight: 600;
   letter-spacing: 0.2px;

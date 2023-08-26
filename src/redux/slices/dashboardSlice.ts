@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Notification, SidebarTile } from "interfaces/";
 import { initialPanels } from "../../data/utils/initialPanels";
+import { LoadingState, DashbaordMode } from "objects/";
 
 type DashboardState = {
   lookupText?: string;
   isLookupActive: boolean;
-  loading: string;
+  loading: LoadingState;
+  mode: DashbaordMode;
   notifications: Notification[];
   authCode?: string;
   channelId?: string;
@@ -13,9 +15,10 @@ type DashboardState = {
 };
 
 const initialState: DashboardState = {
-  lookupText: undefined,
+  lookupText: "",
   isLookupActive: false,
-  loading: "",
+  loading: LoadingState.Succeded,
+  mode: DashbaordMode.Searching,
   notifications: [],
   authCode: "",
   channelId: "",
