@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Notification, SidebarTile, User } from "interfaces/";
 import { initialPanels } from "../../data/utils/initialPanels";
 import { LoadingState, DashbaordMode } from "objects/";
-import { getUser } from "store/apis/users";
+import { getUser, updateUser } from "store/apis/users";
 
 type DashboardState = {
   lookupText?: string;
@@ -68,6 +68,21 @@ export const dashboardSlice = createSlice({
         loading: LoadingState.Failed,
       };
     });
+
+    builder.addCase(
+      updateUser.fulfilled,
+      (state: DashboardState, action: PayloadAction<User>) => {
+        const { payload } = action;
+        const authCode = payload.authCode;
+        const channelId = payload.channelId;
+
+        return {
+          ...state,
+          authCode,
+          channelId,
+        };
+      }
+    );
   },
 });
 
