@@ -3,6 +3,7 @@ import { Notification, SidebarTile, User } from "interfaces/";
 import { initialPanels } from "../../data/utils/initialPanels";
 import { LoadingState, DashbaordMode } from "objects/";
 import { getUser, updateUser } from "store/apis/users";
+import { getNotifications } from "store/apis/notifications";
 
 type DashboardState = {
   lookupText?: string;
@@ -68,7 +69,6 @@ export const dashboardSlice = createSlice({
         loading: LoadingState.Failed,
       };
     });
-
     builder.addCase(
       updateUser.fulfilled,
       (state: DashboardState, action: PayloadAction<User>) => {
@@ -80,6 +80,17 @@ export const dashboardSlice = createSlice({
           ...state,
           authCode,
           channelId,
+        };
+      }
+    );
+    builder.addCase(
+      getNotifications.fulfilled,
+      (state: DashboardState, action: PayloadAction<Notification[]>) => {
+        const { payload: notifications } = action;
+        console.log(notifications);
+        return {
+          ...state,
+          notifications,
         };
       }
     );
