@@ -9,7 +9,7 @@ export const getNotifications = createAsyncThunk(
       const data = response.data;
       return data;
     } catch (error) {
-      rejectWithValue("Failed to get user.");
+      rejectWithValue("Failed to get notifications.");
     }
   }
 );
