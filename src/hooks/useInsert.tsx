@@ -1,11 +1,13 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAppSelector } from "store/hooks";
+import { updateUserLookup } from "store/apis/users";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 
 type FormValues = {
   lookupText: string;
 };
 
 const useInsert = () => {
+  const dispatch = useAppDispatch();
   const lookupText = useAppSelector((state) => state.dashboard.lookupText);
   const {
     control,
@@ -19,7 +21,7 @@ const useInsert = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    dispatch(updateUserLookup(data));
   };
 
   return {

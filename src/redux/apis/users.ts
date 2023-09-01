@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosBase } from "utils/axiosConfig";
+import { listenToNotifications } from "./notifications";
 
 export const getUser = createAsyncThunk(
   "dashboard/getUser",
@@ -33,6 +34,28 @@ export const updateUser = createAsyncThunk(
         },
       });
       const data = response.data;
+      return data;
+    } catch (error) {
+      rejectWithValue("Failed to get user.");
+    }
+  }
+);
+
+export const updateUserLookup = createAsyncThunk(
+  "dashboard/updateUserLookup",
+  async (payload: { lookupText: string }, { dispatch, rejectWithValue }) => {
+    const lookupText = payload.lookupText;
+    try {
+      const body = {
+        lookupText,
+      };
+      const response = await axiosBase.post("/update-user", body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = response.data;
+      dispatch(listenToNotifications());
       return data;
     } catch (error) {
       rejectWithValue("Failed to get user.");

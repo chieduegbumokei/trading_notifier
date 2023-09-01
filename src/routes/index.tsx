@@ -5,12 +5,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { routes } from "./utils";
 import { useAppDispatch } from "store/hooks";
 import { getUser } from "store/apis/users";
+import { getNotifications } from "store/apis/notifications";
 
 const Router: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getNotifications());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

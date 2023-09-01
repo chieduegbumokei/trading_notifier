@@ -12,13 +12,14 @@ export const corsHeaders = {
 };
 
 serve(async (req) => {
-  const { channelId, authCode } = await req.json();
+  const { channelId, authCode, lookupText } = await req.json();
   try {
     const { data: updatedUser } = await supabase
       .from("Users")
       .update({
         channelId,
         authCode,
+        lookupText,
       })
       .eq("id", 1)
       .select();

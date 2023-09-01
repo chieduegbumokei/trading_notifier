@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
       {mode === DashbaordMode.Denied && <DashboardNoAccess />}
       {mode === DashbaordMode.Insert && <DashboardInsert />}
       {mode === DashbaordMode.Searching && <DashboardSearching />}
+      {mode === DashbaordMode.Loading && <DashboardSearching />}
     </>
   );
 };

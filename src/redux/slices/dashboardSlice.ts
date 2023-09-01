@@ -2,10 +2,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Notification, SidebarTile, User } from "interfaces/";
 import { initialPanels } from "../../data/utils/initialPanels";
 import { LoadingState, DashbaordMode } from "objects/";
-import { getUser, updateUser } from "store/apis/users";
-import { getNotifications } from "store/apis/notifications";
+import { getUser, updateUser, updateUserLookup } from "store/apis/users";
+import {
+  getNotifications,
+  listenToNotifications,
+} from "store/apis/notifications";
 
-type DashboardState = {
+export type DashboardState = {
   lookupText?: string;
   isLookupActive: boolean;
   loading: LoadingState;
@@ -14,6 +17,7 @@ type DashboardState = {
   authCode?: string;
   channelId?: string;
   panels: SidebarTile[];
+  notificationsEventSource?: EventSource;
 };
 
 const initialState: DashboardState = {
@@ -25,12 +29,24 @@ const initialState: DashboardState = {
   authCode: "",
   channelId: "",
   panels: initialPanels,
+  notificationsEventSource: undefined,
 };
 
 export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
-  reducers: {},
+  reducers: {
+    handleRemoveNotificationsEventSource: (state) => {
+      state.notificationsEventSource?.close();
+      state.notificationsEventSource = undefined;
+      return;
+    },
+    handleStopSearch: (state) => {
+      state.isLookupActive = false;
+      state.mode = DashbaordMode.Insert;
+      return;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUser.pending, (state: DashboardState) => {
       return {
@@ -94,7 +110,47 @@ export const dashboardSlice = createSlice({
         };
       }
     );
+    builder.addCase(
+      listenToNotifications.fulfilled,
+      (
+        state: DashboardState,
+        action: PayloadAction<
+          EventSource | undefined,
+          string,
+          { arg: void; requestId: string; requestStatus: "fulfilled" },
+          never
+        >
+      ) => {
+        const { payload } = action;
+        state.notificationsEventSource = payload;
+        return;
+      }
+    );
+    builder.addCase(updateUserLookup.pending, (state: DashboardState) => {
+      state.mode = DashbaordMode.Loading;
+      return state;
+    });
+    builder.addCase(
+      updateUserLookup.fulfilled,
+      (state: DashboardState, action: PayloadAction<User>) => {
+        const { payload } = action;
+        const lookupText = payload.lookupText;
+        state.lookupText = lookupText;
+        state.isLookupActive = true;
+        state.mode = DashbaordMode.Searching;
+        return state;
+      }
+    );
+    builder.addCase(updateUserLookup.rejected, (state: DashboardState) => {
+      state.mode = DashbaordMode.Denied;
+      state.isLookupActive = false;
+      state.lookupText = initialState.lookupText;
+      return state;
+    });
   },
 });
+
+export const { handleRemoveNotificationsEventSource, handleStopSearch } =
+  dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

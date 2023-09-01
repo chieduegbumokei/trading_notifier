@@ -3,4 +3,5 @@ export enum DashbaordMode {
   Denied = "Denied",
   Welcome = "Welcome",
   Insert = "Insert",
+  Loading = "Loading",
 }
