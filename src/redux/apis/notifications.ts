@@ -21,7 +21,6 @@ export const listenToNotifications = createAsyncThunk(
   "dashboard/listenToNotifications",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      console.log("Inside listenToNotifications:");
       const eventSource = new EventSource(`${baseUrl}/listen-to-notifications`);
       eventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);

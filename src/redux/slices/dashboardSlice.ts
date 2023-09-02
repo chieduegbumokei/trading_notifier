@@ -74,8 +74,6 @@ export const dashboardSlice = createSlice({
         const isLookupActive = lookupText.trim().length > 0;
         let mode = state.mode;
 
-        console.log(lookupText.trim().length > 0);
-        console.log(lookupText);
         if (isLookupActive) mode = DashbaordMode.Searching;
         if (channelId.trim().length === 0 && authCode.trim().length === 0)
           mode = DashbaordMode.Welcome;
@@ -114,7 +112,6 @@ export const dashboardSlice = createSlice({
       getNotifications.fulfilled,
       (state: DashboardState, action: PayloadAction<Notification[]>) => {
         const { payload: notifications } = action;
-        console.log(notifications);
         return {
           ...state,
           notifications,
