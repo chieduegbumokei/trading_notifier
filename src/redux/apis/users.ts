@@ -4,10 +4,15 @@ import { listenToNotifications } from "./notifications";
 
 export const getUser = createAsyncThunk(
   "dashboard/getUser",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const response = await axiosBase.get("/get-user");
       const data = response.data;
+      const lookupText = data.lookupText;
+      const isLookupActive = lookupText.trim().length > 0;
+
+      if (isLookupActive) dispatch(listenToNotifications());
+
       return data;
     } catch (error) {
       rejectWithValue("Failed to get user.");

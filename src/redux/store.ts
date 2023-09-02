@@ -9,8 +9,14 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActionPaths: ["dasshboard.panels"],
-        ignoredPaths: ["dashboard.panels"],
+        ignoredActionPaths: [
+          "dashboard.panels",
+          "dashboard.notificationsEventSource",
+        ],
+        ignoredPaths: [
+          "dashboard.panels",
+          "dashboard.notificationsEventSource",
+        ],
       },
     }),
 });
