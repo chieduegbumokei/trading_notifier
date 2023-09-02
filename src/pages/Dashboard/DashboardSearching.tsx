@@ -6,6 +6,7 @@ import {
   handleRemoveNotificationsEventSource,
   handleStopSearch,
 } from "store/slices/dashboardSlice";
+import { updateUserLookup } from "store/apis/users";
 
 const DashboardSearching: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ const DashboardSearching: React.FC = () => {
   const handleClick = () => {
     dispatch(handleStopSearch());
     dispatch(handleRemoveNotificationsEventSource());
+    dispatch(updateUserLookup({ lookupText: "" }));
   };
 
   return (
