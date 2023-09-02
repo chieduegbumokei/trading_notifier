@@ -13,19 +13,33 @@ serve(async () => {
     start(controller) {
       timerId = setInterval(async () => {
         try {
-          const { authCode, channelId } = await getUserCredentials();
+          const { authCode, channelId, lookupText } =
+            await getUserCredentials();
           if (authCode.length === 0 || channelId.length === 0)
             throw new Error("Empty Credentials");
           const messages = await retrieveMessages(authCode, channelId);
+          const convertedMessages = messages.map((message: any) =>
+            convertMessagesFromJson(message)
+          );
+          const notifcations = await getNotifications();
+          const notifcationsIds = notifcations.map(
+            (notification) => notification.id
+          );
+          const filteredMessages = filterNotificationsWithLookupText(
+            convertedMessages,
+            lookupText,
+            notifcationsIds
+          );
+          insertNotifications(filteredMessages);
           msg = new TextEncoder().encode(
-            `data: ${JSON.stringify(messages)}\r\n\r\n`
+            `data: ${JSON.stringify(filteredMessages)}\r\n\r\n`
           );
           controller.enqueue(msg);
         } catch (error) {
           console.log(error);
           controller.close();
         }
-      }, 20000);
+      }, 5000);
     },
     cancel() {
       if (typeof timerId === "number" || timerId) {
@@ -66,6 +80,42 @@ const getUserCredentials = async (): Promise<{
     channelId,
     lookupText,
   };
+};
+
+const getNotifications = async () => {
+  const { data: notifications } = await supabase
+    .from("Notifications")
+    .select("*");
+  return notifications;
+};
+
+const insertNotifications = async (notifications) => {
+  await supabase.from("Notifications").insert(notifications).select();
+};
+
+const filterNotificationsWithLookupText = (notifcations, text, ids) =>
+  notifcations.filter(
+    (notification) =>
+      notification.content.toLowerCase().includes(text.toLowerCase()) &&
+      !ids.includes(notification.id)
+  );
+
+export const convertMessagesFromJson = (data: any) => {
+  const id = data.id;
+  const username = data.author.username;
+  const timestamp = data.timestamp;
+  const content = data.content;
+  const messageLink = `https://discord.com/channels/@me/${data.author.id}`;
+
+  const message = {
+    id,
+    username,
+    timestamp,
+    content,
+    messageLink,
+  };
+
+  return message;
 };
 
 // To invoke:

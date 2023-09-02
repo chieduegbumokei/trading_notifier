@@ -44,7 +44,16 @@ export const dashboardSlice = createSlice({
     handleStopSearch: (state) => {
       state.isLookupActive = false;
       state.mode = DashbaordMode.Insert;
+      state.lookupText = "";
       return;
+    },
+    addNotifications: (state: DashboardState, action) => {
+      const { payload } = action;
+      const notifications = [...state.notifications, ...payload];
+      return {
+        ...state,
+        notifications,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -150,7 +159,10 @@ export const dashboardSlice = createSlice({
   },
 });
 
-export const { handleRemoveNotificationsEventSource, handleStopSearch } =
-  dashboardSlice.actions;
+export const {
+  handleRemoveNotificationsEventSource,
+  handleStopSearch,
+  addNotifications,
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
