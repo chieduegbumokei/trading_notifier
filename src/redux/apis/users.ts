@@ -60,7 +60,7 @@ export const updateUserLookup = createAsyncThunk(
         },
       });
       const data = response.data;
-      dispatch(listenToNotifications());
+      if (lookupText.trim().length > 0) dispatch(listenToNotifications());
       return data;
     } catch (error) {
       rejectWithValue("Failed to get user.");

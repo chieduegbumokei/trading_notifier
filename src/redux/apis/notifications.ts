@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { baseUrl } from "constants/endpoints";
 import { DashboardState, addNotifications } from "store/slices/dashboardSlice";
 import { axiosBase } from "utils/axiosConfig";
+import { sendNotification } from "utils/notifications";
 
 export const getNotifications = createAsyncThunk(
   "dashboard/getNotifications",
@@ -24,7 +25,10 @@ export const listenToNotifications = createAsyncThunk(
       const eventSource = new EventSource(`${baseUrl}/listen-to-notifications`);
       eventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);
-        dispatch(addNotifications(data));
+        if (data.length > 0) {
+          dispatch(addNotifications(data));
+          sendNotification();
+        }
       };
       return eventSource;
     } catch (error) {

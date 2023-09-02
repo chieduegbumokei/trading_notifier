@@ -30,11 +30,13 @@ serve(async () => {
             lookupText,
             notifcationsIds
           );
-          insertNotifications(filteredMessages);
-          msg = new TextEncoder().encode(
-            `data: ${JSON.stringify(filteredMessages)}\r\n\r\n`
-          );
-          controller.enqueue(msg);
+          if (filteredMessages.length > 0) {
+            insertNotifications(filteredMessages);
+            msg = new TextEncoder().encode(
+              `data: ${JSON.stringify(filteredMessages)}\r\n\r\n`
+            );
+            controller.enqueue(msg);
+          }
         } catch (error) {
           console.log(error);
           controller.close();

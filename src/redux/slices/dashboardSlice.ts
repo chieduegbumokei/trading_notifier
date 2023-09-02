@@ -74,6 +74,8 @@ export const dashboardSlice = createSlice({
         const isLookupActive = lookupText.trim().length > 0;
         let mode = state.mode;
 
+        console.log(lookupText.trim().length > 0);
+        console.log(lookupText);
         if (isLookupActive) mode = DashbaordMode.Searching;
         if (channelId.trim().length === 0 && authCode.trim().length === 0)
           mode = DashbaordMode.Welcome;
@@ -144,9 +146,15 @@ export const dashboardSlice = createSlice({
       (state: DashboardState, action: PayloadAction<User>) => {
         const { payload } = action;
         const lookupText = payload.lookupText;
+        const mode =
+          lookupText.trim().length > 0
+            ? DashbaordMode.Searching
+            : DashbaordMode.Insert;
+        const isLookupActive = lookupText.trim().length > 0;
+
         state.lookupText = lookupText;
-        state.isLookupActive = true;
-        state.mode = DashbaordMode.Searching;
+        state.isLookupActive = isLookupActive;
+        state.mode = mode;
         return state;
       }
     );

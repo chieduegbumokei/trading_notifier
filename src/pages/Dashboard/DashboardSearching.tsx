@@ -13,9 +13,9 @@ const DashboardSearching: React.FC = () => {
   const lookupText = useAppSelector((state) => state.dashboard.lookupText);
 
   const handleClick = () => {
+    dispatch(updateUserLookup({ lookupText: "" }));
     dispatch(handleStopSearch());
     dispatch(handleRemoveNotificationsEventSource());
-    dispatch(updateUserLookup({ lookupText: "" }));
   };
 
   return (
