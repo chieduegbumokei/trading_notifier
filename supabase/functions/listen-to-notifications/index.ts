@@ -1,17 +1,34 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https:esm.sh/@supabase/supabase-js@2.7.0";
 
-const msg = new TextEncoder().encode("data: hello\r\n\r\n");
+const url = Deno.env.get("_SUPABASE_URL") as string;
+const key = Deno.env.get("_SUPABASE_SERVICE_KEY") as string;
+const supabase = createClient(url, key);
 
-serve(() => {
+let msg = new TextEncoder().encode("data: hello\r\n\r\n");
+
+serve(async () => {
   let timerId: number | NodeJS.Timer | undefined;
   const body = new ReadableStream({
     start(controller) {
-      timerId = setInterval(() => {
-        controller.enqueue(msg);
-      }, 1000);
+      timerId = setInterval(async () => {
+        try {
+          const { authCode, channelId } = await getUserCredentials();
+          if (authCode.length === 0 || channelId.length === 0)
+            throw new Error("Empty Credentials");
+          const messages = await retrieveMessages(authCode, channelId);
+          msg = new TextEncoder().encode(
+            `data: ${JSON.stringify(messages)}\r\n\r\n`
+          );
+          controller.enqueue(msg);
+        } catch (error) {
+          console.log(error);
+          controller.close();
+        }
+      }, 20000);
     },
     cancel() {
-      if (typeof timerId === "number") {
+      if (typeof timerId === "number" || timerId) {
         clearInterval(timerId);
       }
     },
@@ -22,6 +39,35 @@ serve(() => {
     },
   });
 });
+
+const retrieveMessages = async (authCode, channelId, limit = 10) => {
+  const url = `https://discord.com/api/v9/channels/${channelId}/messages?limit=${limit}`;
+  const headers = new Headers();
+  headers.set("authorization", authCode);
+  const response = await fetch(url, { headers });
+  const data = response.json();
+  return data;
+};
+
+const getUserCredentials = async (): Promise<{
+  authCode: string;
+  channelId: string;
+  lookupText: string;
+}> => {
+  const { data: users } = await supabase
+    .from("Users")
+    .select("*")
+    .eq("username", "ugo");
+
+  const { authCode, channelId, lookupText } = users[0];
+
+  return {
+    authCode,
+    channelId,
+    lookupText,
+  };
+};
+
 // To invoke:
 // curl -i --location --request POST 'http://localhost:54321/functions/v1/' \
 //   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
