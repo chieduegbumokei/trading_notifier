@@ -11,7 +11,7 @@ export const getUser = createAsyncThunk(
       const lookupText = data.lookupText;
       const isLookupActive = lookupText.trim().length > 0;
 
-      if (isLookupActive) dispatch(listenToNotifications());
+      if (isLookupActive) dispatch(listenToNotifications({ lookupText }));
 
       return data;
     } catch (error) {
@@ -60,7 +60,8 @@ export const updateUserLookup = createAsyncThunk(
         },
       });
       const data = response.data;
-      if (lookupText.trim().length > 0) dispatch(listenToNotifications());
+      if (lookupText.trim().length > 0)
+        dispatch(listenToNotifications({ lookupText }));
       return data;
     } catch (error) {
       rejectWithValue("Failed to get user.");

@@ -125,7 +125,11 @@ export const dashboardSlice = createSlice({
         action: PayloadAction<
           EventSource | undefined,
           string,
-          { arg: void; requestId: string; requestStatus: "fulfilled" },
+          {
+            arg: { lookupText: string };
+            requestId: string;
+            requestStatus: "fulfilled";
+          },
           never
         >
       ) => {

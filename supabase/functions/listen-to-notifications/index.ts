@@ -7,15 +7,23 @@ const supabase = createClient(url, key);
 
 let msg = new TextEncoder().encode("data: hello\r\n\r\n");
 
-serve(async () => {
+serve(async (req) => {
+  const url = await req.url;
+  const searchParams = new URL(url).searchParams;
+  const channelId = searchParams.get("channelId") ?? "";
+  const authCode = searchParams.get("authCode") ?? "";
+  const lookupText = searchParams.get("lookupText") ?? "";
+
   let timerId: number | NodeJS.Timer | undefined;
   const body = new ReadableStream({
     start(controller) {
       timerId = setInterval(async () => {
         try {
-          const { authCode, channelId, lookupText } =
-            await getUserCredentials();
-          if (authCode.length === 0 || channelId.length === 0)
+          if (
+            authCode.length === 0 ||
+            channelId.length === 0 ||
+            lookupText.length === 0
+          )
             throw new Error("Empty Credentials");
           const messages = await retrieveMessages(authCode, channelId);
           const convertedMessages = messages.map((message: any) =>
@@ -30,6 +38,7 @@ serve(async () => {
             lookupText,
             notifcationsIds
           );
+
           if (filteredMessages.length > 0) {
             insertNotifications(filteredMessages);
             msg = new TextEncoder().encode(
@@ -65,25 +74,6 @@ const retrieveMessages = async (authCode, channelId, limit = 10) => {
   return data;
 };
 
-const getUserCredentials = async (): Promise<{
-  authCode: string;
-  channelId: string;
-  lookupText: string;
-}> => {
-  const { data: users } = await supabase
-    .from("Users")
-    .select("*")
-    .eq("username", "ugo");
-
-  const { authCode, channelId, lookupText } = users[0];
-
-  return {
-    authCode,
-    channelId,
-    lookupText,
-  };
-};
-
 const getNotifications = async () => {
   const { data: notifications } = await supabase
     .from("Notifications")
@@ -99,7 +89,7 @@ const filterNotificationsWithLookupText = (notifcations, text, ids) =>
   notifcations.filter(
     (notification) =>
       notification.content.toLowerCase().includes(text.toLowerCase()) &&
-      !ids.includes(notification.id)
+      !ids.includes(+notification.id)
   );
 
 export const convertMessagesFromJson = (data: any) => {

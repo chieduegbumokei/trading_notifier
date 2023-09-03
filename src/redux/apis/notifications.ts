@@ -19,12 +19,22 @@ export const getNotifications = createAsyncThunk(
 
 export const listenToNotifications = createAsyncThunk(
   "dashboard/listenToNotifications",
-  async (_, { dispatch, rejectWithValue }) => {
+  async (
+    payload: { lookupText: string },
+    { dispatch, getState, rejectWithValue }
+  ) => {
     try {
-      const eventSource = new EventSource(`${baseUrl}/listen-to-notifications`);
+      const { dashboard } = getState() as { dashboard: DashboardState };
+      const channelId = dashboard.channelId;
+      const authCode = dashboard.authCode;
+      const lookupText = payload.lookupText;
+      const url = `${baseUrl}listen-to-notifications?channelId=${channelId}&authCode=${authCode}&lookupText=${lookupText}`;
+      const eventSource = new EventSource(url);
       eventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data.length > 0) {
+          console.log("Adding Notifications:");
+          console.log(data);
           dispatch(addNotifications(data));
           sendNotification();
         }
