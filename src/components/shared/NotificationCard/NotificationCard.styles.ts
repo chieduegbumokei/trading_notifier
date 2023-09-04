@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const Container = styled.section`
@@ -32,21 +31,6 @@ export const Content = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 10px;
-`;
-
-export const SendMessageLink = styled(Link)`
-  display: flex;
-  padding: 0 16px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  background: #0c7fda;
-  text-decoration: none;
-  height: 1.938rem;
-  width: max-content;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 400;
 `;
 
 export const DateContainer = styled.span`

@@ -10,13 +10,12 @@ const Notifications: React.FC = () => {
 
   return (
     <Container>
-      {notifications.map((notification, i) => (
+      {notifications.map((notification) => (
         <NotificationCard
-          key={i}
+          key={notification.id}
           username={notification.username}
           timestamp={notification.timestamp}
           content={notification.content}
-          messageLink={notification.messageLink}
         />
       ))}
     </Container>
