@@ -6,7 +6,8 @@ import { Controller } from "react-hook-form";
 import Button from "components/shared/Button/Button";
 
 const Settings: React.FC = () => {
-  const { control, handleSubmit, onSubmit, isSubmitting } = useSettings();
+  const { control, handleSubmit, onSubmit, disabled } = useSettings();
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <Controller
@@ -22,6 +23,7 @@ const Settings: React.FC = () => {
             value={value}
             error={error?.message}
             onChange={onChange}
+            disabled={disabled}
             placeholder="Please Insert code here * "
           />
         )}
@@ -39,11 +41,12 @@ const Settings: React.FC = () => {
             value={value}
             error={error?.message}
             onChange={onChange}
+            disabled={disabled}
             placeholder="Please Insert channel id here * "
           />
         )}
       />
-      <Button text="Save" disabled={isSubmitting} type="submit" />
+      <Button text="Save" disabled={disabled} type="submit" />
     </Container>
   );
 };

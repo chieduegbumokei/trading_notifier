@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { updateUser } from "store/apis/users";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -12,6 +12,9 @@ const useSettings = () => {
   const dispatch = useAppDispatch();
   const authCode = useAppSelector((state) => state.dashboard.authCode);
   const channelId = useAppSelector((state) => state.dashboard.channelId);
+  const isLookupActive = useAppSelector(
+    (state) => state.dashboard.isLookupActive
+  );
   const {
     control,
     handleSubmit,
@@ -24,6 +27,10 @@ const useSettings = () => {
       channelId,
     },
   });
+  const disabled = useMemo(
+    () => isLookupActive || isSubmitting,
+    [isSubmitting, isLookupActive]
+  );
 
   useEffect(() => {
     if (authCode) setValue("authCode", authCode);
@@ -38,7 +45,7 @@ const useSettings = () => {
     control,
     handleSubmit,
     onSubmit,
-    isSubmitting,
+    disabled,
   };
 };
 
