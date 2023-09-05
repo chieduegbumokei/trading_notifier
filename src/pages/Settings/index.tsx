@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Container } from "./index.styles";
 import Input from "components/shared/Input/Input";
 import useSettings from "hooks/useSettings";
 import { Controller } from "react-hook-form";
 import Button from "components/shared/Button/Button";
+import { setWindowTitle } from "ipc/ipcMessages";
 
 const Settings: React.FC = () => {
   const { control, handleSubmit, onSubmit, disabled } = useSettings();
+
+  useLayoutEffect(() => {
+    setWindowTitle("Settings - Trading Notifier");
+  }, []);
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>

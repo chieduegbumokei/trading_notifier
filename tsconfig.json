@@ -31,6 +31,7 @@
       "routes/": ["./src/routes", "./src/routes/*"],
       "interfaces/": ["./src/data/interfaces/", "./src/data/interfaces/*"],
       "objects/": ["./src/data/objects/", "./src/data/objects/*"],
+      "ipc/*": ["./src/data/ipc/*"],
       "store/*": ["./src/redux/*"]
     }
   },

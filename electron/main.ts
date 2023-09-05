@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "node:path";
+import { registerIPCHandlers } from "./IPC/IPCHandlers";
 
 // The built directory structure
 //
@@ -21,16 +22,14 @@ const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
 function createWindow() {
   win = new BrowserWindow({
-    height: 800,
-    width: 864,
     minHeight: 800,
     minWidth: 864,
     icon: path.join(process.env.PUBLIC, "logo.ico"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       webSecurity: false,
+      sandbox: false,
     },
-    fullscreen: true,
   });
 
   // Test active push message to Renderer-process.
@@ -44,10 +43,15 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, "index.html"));
   }
+
+  win.maximize();
 }
 
 app.on("window-all-closed", () => {
   win = null;
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  registerIPCHandlers();
+  createWindow();
+});
