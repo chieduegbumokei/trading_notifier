@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import { registerIPCHandlers } from "./IPC/IPCHandlers";
+import installExtension, { REDUX_DEVTOOLS } from "electron-devtools-installer";
 
 // The built directory structure
 //
@@ -53,5 +54,12 @@ app.on("window-all-closed", () => {
 
 app.whenReady().then(() => {
   registerIPCHandlers();
+
+  [REDUX_DEVTOOLS].map((extension) => {
+    installExtension(extension)
+      .then((name: string) => console.log(`Added extension ${name}.`))
+      .catch((err) => console.log("Ann error occurred: ", err));
+  });
+
   createWindow();
 });

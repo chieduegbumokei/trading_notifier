@@ -1,7 +1,7 @@
 import MainLayout from "components/layouts/main/MainLayout";
 import { INITIAL_ROUTE } from "constants/paths";
 import React, { Suspense, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { routes } from "./utils";
 import { useAppDispatch } from "store/hooks";
 import { getUser } from "store/apis/users";
@@ -17,7 +17,7 @@ const Router: React.FC = () => {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Suspense fallback={<span>Loading...</span>}>
         <Routes>
           <Route path={INITIAL_ROUTE} element={<MainLayout />}>
@@ -31,7 +31,7 @@ const Router: React.FC = () => {
           </Route>
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
