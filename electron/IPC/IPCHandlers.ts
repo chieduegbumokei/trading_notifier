@@ -1,7 +1,7 @@
 import { BrowserWindow, IpcMainEvent, ipcMain } from "electron";
 import { IPC_ACTIONS } from "./IPCActions";
 
-const { SET_WINDOW_TITLE } = IPC_ACTIONS.Window;
+const { SET_WINDOW_TITLE, OPEN_LINK } = IPC_ACTIONS.Window;
 
 const handleSetWindowTitle = (event: IpcMainEvent, title: string) => {
   const webContents = event?.sender;
@@ -10,10 +10,18 @@ const handleSetWindowTitle = (event: IpcMainEvent, title: string) => {
   window?.setTitle(title);
 };
 
+const handleOpenLink = (event: IpcMainEvent, url: string) => {
+  console.log("Link");
+};
+
 const ipcHandlers = [
   {
     event: SET_WINDOW_TITLE,
     callback: handleSetWindowTitle,
+  },
+  {
+    event: OPEN_LINK,
+    callback: handleOpenLink,
   },
 ];
 
