@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IPC_ACTIONS } from "./IPC/IPCActions";
 
-const { SET_WINDOW_TITLE } = IPC_ACTIONS.Window;
+const { SET_WINDOW_TITLE, OPEN_LINK } = IPC_ACTIONS.Window;
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]
@@ -100,4 +100,5 @@ setTimeout(removeLoading, 4999);
 
 contextBridge.exposeInMainWorld("ipcAPI", {
   setWindowTitle: (title: string) => ipcRenderer.send(SET_WINDOW_TITLE, title),
+  openLink: (url: string) => ipcRenderer.send(OPEN_LINK, url),
 });
