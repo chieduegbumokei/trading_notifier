@@ -42,3 +42,20 @@ export const DateContainer = styled.span`
   font-weight: 400;
   letter-spacing: -0.48px;
 `;
+
+export const SendMessageLink = styled.button`
+  cursor: pointer;
+  border: none;
+  display: flex;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: #0c7fda;
+  text-decoration: none;
+  height: 1.938rem;
+  width: max-content;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+`;

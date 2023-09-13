@@ -21,6 +21,7 @@ const Notifications: React.FC = () => {
           username={notification.username}
           timestamp={notification.timestamp}
           content={notification.content}
+          messageLink={notification.messageLink}
         />
       ))}
     </Container>
