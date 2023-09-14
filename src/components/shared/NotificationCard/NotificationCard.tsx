@@ -30,7 +30,7 @@ const NotificationCard: React.FC<Props> = ({
       <Username>{username}</Username>
       <Content>{content}</Content>
       <DateContainer>{time}</DateContainer>
-      <SendMessageLink onClick={handleClick}>Send Message</SendMessageLink>
+      <SendMessageLink onClick={handleClick}>Open Chat</SendMessageLink>
     </Container>
   );
 };
