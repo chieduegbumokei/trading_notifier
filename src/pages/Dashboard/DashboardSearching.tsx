@@ -2,11 +2,9 @@ import React from "react";
 import { Container } from "./index.styles";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import Button from "components/shared/Button/Button";
-import {
-  handleRemoveNotificationsEventSource,
-  handleStopSearch,
-} from "store/slices/dashboardSlice";
+import { handleStopSearch } from "store/slices/dashboardSlice";
 import { updateUserLookup } from "store/apis/users";
+import { handleRemoveNotificationsEventSource } from "store/slices/notificationsSlice";
 
 const DashboardSearching: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -1,23 +1,17 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Notification, SidebarTile, User } from "interfaces/";
+import { SidebarTile, User } from "interfaces/";
 import { initialPanels } from "../../data/utils/initialPanels";
 import { LoadingState, DashbaordMode } from "objects/";
 import { getUser, updateUser, updateUserLookup } from "store/apis/users";
-import {
-  getNotifications,
-  listenToNotifications,
-} from "store/apis/notifications";
 
 export type DashboardState = {
   lookupText?: string;
   isLookupActive: boolean;
   loading: LoadingState;
   mode: DashbaordMode;
-  notifications: Notification[];
   authCode?: string;
   channelId?: string;
   panels: SidebarTile[];
-  notificationsEventSource?: EventSource;
 };
 
 const initialState: DashboardState = {
@@ -25,35 +19,20 @@ const initialState: DashboardState = {
   isLookupActive: false,
   loading: LoadingState.Idle,
   mode: DashbaordMode.Insert,
-  notifications: [],
   authCode: "",
   channelId: "",
   panels: initialPanels,
-  notificationsEventSource: undefined,
 };
 
 export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
-    handleRemoveNotificationsEventSource: (state) => {
-      state.notificationsEventSource?.close();
-      state.notificationsEventSource = undefined;
-      return;
-    },
     handleStopSearch: (state) => {
       state.isLookupActive = false;
       state.mode = DashbaordMode.Insert;
       state.lookupText = "";
       return;
-    },
-    addNotifications: (state: DashboardState, action) => {
-      const { payload } = action;
-      const notifications = [...state.notifications, ...payload];
-      return {
-        ...state,
-        notifications,
-      };
     },
   },
   extraReducers: (builder) => {
@@ -108,36 +87,6 @@ export const dashboardSlice = createSlice({
         };
       }
     );
-    builder.addCase(
-      getNotifications.fulfilled,
-      (state: DashboardState, action: PayloadAction<Notification[]>) => {
-        const { payload: notifications } = action;
-        return {
-          ...state,
-          notifications,
-        };
-      }
-    );
-    builder.addCase(
-      listenToNotifications.fulfilled,
-      (
-        state: DashboardState,
-        action: PayloadAction<
-          EventSource | undefined,
-          string,
-          {
-            arg: { lookupText: string };
-            requestId: string;
-            requestStatus: "fulfilled";
-          },
-          never
-        >
-      ) => {
-        const { payload } = action;
-        state.notificationsEventSource = payload;
-        return;
-      }
-    );
     builder.addCase(updateUserLookup.pending, (state: DashboardState) => {
       state.mode = DashbaordMode.Loading;
       return state;
@@ -168,10 +117,6 @@ export const dashboardSlice = createSlice({
   },
 });
 
-export const {
-  handleRemoveNotificationsEventSource,
-  handleStopSearch,
-  addNotifications,
-} = dashboardSlice.actions;
+export const { handleStopSearch } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
