@@ -47,6 +47,16 @@ export const notificationsSlice = createSlice({
         recentData: [],
       };
     },
+    handleMode: (
+      state: NotificationsState,
+      action: PayloadAction<NotificationsMode>
+    ) => {
+      const { payload: mode } = action;
+      return {
+        ...state,
+        mode,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getNotifications.pending, (state: NotificationsState) => {
@@ -99,6 +109,7 @@ export const {
   handleRemoveNotificationsEventSource,
   addNotifications,
   clearRecentData,
+  handleMode,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;
