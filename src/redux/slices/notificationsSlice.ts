@@ -10,6 +10,7 @@ export type NotificationsState = {
   loading: LoadingState;
   mode: NotificationsMode;
   data: Notification[];
+  recentData: Notification[];
   notificationsEventSource?: EventSource;
 };
 
@@ -17,6 +18,7 @@ const initialState: NotificationsState = {
   loading: LoadingState.Idle,
   mode: NotificationsMode.Recent,
   data: [],
+  recentData: [],
   notificationsEventSource: undefined,
 };
 
@@ -32,9 +34,17 @@ export const notificationsSlice = createSlice({
     addNotifications: (state: NotificationsState, action) => {
       const { payload } = action;
       const data = [...state.data, ...payload];
+      const recentData = [...state.recentData, payload];
       return {
         ...state,
         data,
+        recentData,
+      };
+    },
+    clearRecentData: (state: NotificationsState) => {
+      return {
+        ...state,
+        recentData: [],
       };
     },
   },
@@ -85,7 +95,10 @@ export const notificationsSlice = createSlice({
   },
 });
 
-export const { handleRemoveNotificationsEventSource, addNotifications } =
-  notificationsSlice.actions;
+export const {
+  handleRemoveNotificationsEventSource,
+  addNotifications,
+  clearRecentData,
+} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;
