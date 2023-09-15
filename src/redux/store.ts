@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import dashboardReducer from "./slices/dashboardSlice";
+import notificationsReducer from "./slices/notificationsSlice";
 
 export const store = configureStore({
   reducer: {
     dashboard: dashboardReducer,
+    notifications: notificationsReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
@@ -11,11 +13,11 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActionPaths: [
           "dashboard.panels",
-          "dashboard.notificationsEventSource",
+          "notifications.notificationsEventSource",
         ],
         ignoredPaths: [
           "dashboard.panels",
-          "dashboard.notificationsEventSource",
+          "notifications.notificationsEventSource",
         ],
       },
     }),
