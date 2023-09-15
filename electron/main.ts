@@ -25,7 +25,7 @@ function createWindow() {
   win = new BrowserWindow({
     minHeight: 800,
     minWidth: 864,
-    icon: path.join(process.env.PUBLIC, "logo.ico"),
+    icon: path.join(__dirname, "../build/icon.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       webSecurity: false,
@@ -58,7 +58,7 @@ app.whenReady().then(() => {
   [REDUX_DEVTOOLS].map((extension) => {
     installExtension(extension)
       .then((name: string) => console.log(`Added extension ${name}.`))
-      .catch((err) => console.log("Ann error occurred: ", err));
+      .catch((err) => console.log("An error occurred: ", err));
   });
 
   createWindow();
