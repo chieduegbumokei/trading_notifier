@@ -54,7 +54,6 @@ app.on("window-all-closed", () => {
 
 app.whenReady().then(() => {
   registerIPCHandlers();
-
   [REDUX_DEVTOOLS].map((extension) => {
     installExtension(extension)
       .then((name: string) => console.log(`Added extension ${name}.`))

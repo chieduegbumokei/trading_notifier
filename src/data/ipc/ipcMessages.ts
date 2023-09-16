@@ -4,6 +4,6 @@ declare global {
   }
 }
 
-const { setWindowTitle } = window["ipcAPI"];
+const { setWindowTitle, openLink } = window["ipcAPI"];
 
-export { setWindowTitle };
+export { setWindowTitle, openLink };

@@ -1,7 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IPC_ACTIONS } from "./IPC/IPCActions";
+import "dotenv/config";
 
-const { SET_WINDOW_TITLE, OPEN_LINK } = IPC_ACTIONS.Window;
+const { SET_WINDOW_TITLE, OPEN_LINK, GET_JWT_TOKEN } = IPC_ACTIONS.Window;
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]
@@ -102,3 +103,5 @@ contextBridge.exposeInMainWorld("ipcAPI", {
   setWindowTitle: (title: string) => ipcRenderer.send(SET_WINDOW_TITLE, title),
   openLink: (url: string) => ipcRenderer.send(OPEN_LINK, url),
 });
+
+contextBridge.exposeInMainWorld("jwtToken", process.env.REACT_APP_JWT_TOKEN);

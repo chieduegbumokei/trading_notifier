@@ -7,6 +7,7 @@ import {
   Username,
 } from "./NotificationCard.styles";
 import { fromNow } from "utils/time";
+import { openLink } from "ipc/ipcMessages";
 
 interface Props {
   username: string;
@@ -23,7 +24,7 @@ const NotificationCard: React.FC<Props> = ({
 }) => {
   const time = fromNow(new Date(timestamp));
 
-  const handleClick = () => window["ipcAPI"].openLink(messageLink);
+  const handleClick = () => openLink(messageLink);
 
   return (
     <Container>
